@@ -2,6 +2,7 @@
 #include "menu/Menu.h"
 #include "menu/Mascotte.h"
 #include "prestige/PrestigeManager.h"
+#include "game/GameManager.h"
 
 #include <iostream>
 
@@ -10,6 +11,7 @@ int main(int argc, char* argv[])
   Menu menu;
   Mascotte mascotte;
   PrestigeManager prestigeManager;
+  GameManager gameManager;
 
   while (true)
   {
@@ -22,6 +24,7 @@ int main(int argc, char* argv[])
     {
         case 1:
             std::cout << "Game Mode selected" << std::endl;
+            gameManager.startGame(prestigeManager);
             break;
         case 2:
             std::cout << "View Prestige Info" << std::endl;
