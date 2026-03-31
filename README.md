@@ -57,7 +57,7 @@ Depuis la racine du dépôt :
 - **Système de prestige** :
 	- Une bonne réponse augmente les *prestige points*.
 	- Quand le nombre de points atteint un coût (`prestigeCost`), le *prestige level* augmente et le coût augmente pour le niveau suivant.
-	- Un niveau maximum est défini (par défaut 10).
+	- Un niveau maximum est défini (par défaut 5).
 
 ## Utilisation (menu)
 

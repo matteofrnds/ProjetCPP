@@ -17,7 +17,7 @@ public:
 private:
     int prestigeLevel = 1;
     int prestigePoints = 0;
-    int prestigeCost = 50; // Example cost for prestiging
+    int prestigeCost = 30; // Example cost for prestiging
     int prestigeMultiplier = 2; // Example multiplier for prestige points
-    int maxPrestigeLevel = 10; // Example maximum prestige level
+        int maxPrestigeLevel = 5; // Example maximum prestige level
 };
