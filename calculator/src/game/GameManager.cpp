@@ -1,10 +1,12 @@
 
 #include "GameManager.h"
 
+#include <algorithm>
 #include <cctype>
 #include <iostream>
 #include <limits>
 #include <sstream>
+#include <vector>
 
 GameManager::GameManager()
 
@@ -43,8 +45,49 @@ void GameManager::startGame(PrestigeManager& prestigeManager)
 	while (true)
 	{
 		const Problem p = Problem::generate(rng);
+		const int correctAnswer = p.getAnswer();
+
+		std::vector<int> choices;
+		choices.reserve(3);
+		choices.push_back(correctAnswer);
+		std::uniform_int_distribution<int> offsetDist(-20, 20);
+		int attempts = 0;
+		while (choices.size() < 3)
+		{
+			int candidate = correctAnswer + offsetDist(rng);
+			if (candidate < 0)
+			{
+				++attempts;
+				if (attempts > 200)
+				{
+					candidate = correctAnswer + static_cast<int>(choices.size()) + 1;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			if (candidate == correctAnswer)
+			{
+				++attempts;
+				continue;
+			}
+			if (std::find(choices.begin(), choices.end(), candidate) != choices.end())
+			{
+				++attempts;
+				continue;
+			}
+			choices.push_back(candidate);
+		}
+		std::shuffle(choices.begin(), choices.end(), rng);
+
 		std::cout << std::endl;
-		std::cout << p.getText() << " = ";
+		std::cout << p.getText() << " = ?" << std::endl;
+		for (size_t i = 0; i < choices.size(); ++i)
+		{
+			std::cout << (i + 1) << ") " << choices[i] << std::endl;
+		}
+		std::cout << "Votre choix (1/2/3, ou q) : ";
 
 		std::string input;
 		if (!std::getline(std::cin, input))
@@ -58,22 +101,24 @@ void GameManager::startGame(PrestigeManager& prestigeManager)
 			return;
 		}
 
-		int value = 0;
+		int choice = 0;
 		std::istringstream iss(input);
-		if (!(iss >> value))
+		if (!(iss >> choice) || choice < 1 || choice > 3)
 		{
-			std::cout << "Entree invalide -> nouveau calcul." << std::endl;
+			std::cout << "Entree invalide (attendu: 1, 2 ou 3) -> nouveau calcul." << std::endl;
 			continue;
 		}
 
-		if (value == p.getAnswer())
+		const int selectedValue = choices[static_cast<size_t>(choice - 1)];
+
+		if (selectedValue == correctAnswer)
 		{
 			std::cout << "Bonne reponse !" << std::endl;
 			prestigeManager.prestige();
 		}
 		else
 		{
-			std::cout << "Faux (attendu: " << p.getAnswer() << ") -> nouveau calcul." << std::endl;
+			std::cout << "Faux (attendu: " << correctAnswer << ") -> nouveau calcul." << std::endl;
 		}
 	}
 }
