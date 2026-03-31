@@ -8,12 +8,16 @@ Application console de calcul mental en C++ (orienté objet). Le programme gén�
 
 ## Compilation
 
-
-### Option A — Build depuis la racine (recommandé)
-
 ```bash
 cmake -S . -B build
 cmake --build build -j
+```
+
+OU
+
+Lancer le script `start-up.sh`
+```bash
+./start-up.sh
 ```
 
 L’exécutable est généré dans `build/calculator/calculator` (selon le générateur/OS).
